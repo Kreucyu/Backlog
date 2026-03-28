@@ -1,4 +1,4 @@
 package com.backlog_user_service.user_service.dto;
 
-public class RecoveryUserDto {
+public class RecoveryUsuarioDto {
 }

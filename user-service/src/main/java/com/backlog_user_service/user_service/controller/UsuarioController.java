@@ -1,11 +1,14 @@
 package com.backlog_user_service.user_service.controller;
 
 import com.backlog_user_service.user_service.dto.CreateUsuarioDto;
+import com.backlog_user_service.user_service.dto.RecoveryUsuarioDto;
 import com.backlog_user_service.user_service.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -21,6 +24,11 @@ public class UsuarioController {
     @PostMapping
     private ResponseEntity<CreateUsuarioDto> criarUsuario(@RequestBody CreateUsuarioDto createUsuarioDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.criarUsuario(createUsuarioDto));
+    }
+
+    @GetMapping
+    private ResponseEntity<List<RecoveryUsuarioDto>> listarUsuarios() {
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.listarUsuarios());
     }
 
 }

@@ -33,7 +33,7 @@ public class Usuario {
     @Column(nullable = false)
     private LocalDate dataNascimento;
 
-    @Email(message = "O Email não é válido.", regexp = "/^[a-zA-Z0-9_.%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]+{2,}$/")
+    @Email(message = "O Email não é válido.")
     @NotEmpty(message = "O Email não pode ser vazio.")
     @Column(nullable = false)
     private String emailUsuario;

@@ -48,7 +48,7 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<JogoUsuario> jogosBacklogUsuario;
+    private List<JogoUsuario> jogosWishlistUsuario;
 
     public Usuario(String nomeUsuario, LocalDate dataNascimento, String emailUsuario, String senhaUsuario) {
         this.nomeUsuario = nomeUsuario;

@@ -42,5 +42,8 @@ public class UsuarioService {
     }
 
     public void atualizarUsuario(long id, UpdateUsuarioDto updateUsuarioDto) {
+        Usuario usuario = usuarioRepository.findById(id).get;
+        usuario.set
+
     }
 }

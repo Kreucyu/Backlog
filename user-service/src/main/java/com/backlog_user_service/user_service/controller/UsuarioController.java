@@ -31,4 +31,10 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.listarUsuarios());
     }
 
+    @PatchMapping("/{id}")
+    private ResponseEntity<UpdateUsuarioDto> atualizarUsuario(@PathVariable Long id, @RequestBody UpdateUsuarioDto updateUsuarioDto) {
+        usuarioService.atualizarUsuario(updateUsuarioDto);
+        return ResponseEntity.status(HttpStatus.OK).body("Usuário atualizado com sucesso!");
+    }
+
 }

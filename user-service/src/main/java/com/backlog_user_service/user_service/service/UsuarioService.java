@@ -40,4 +40,7 @@ public class UsuarioService {
                 .toList();
         return usuariosRecovery;
     }
+
+    public void atualizarUsuario(long id, UpdateUsuarioDto updateUsuarioDto) {
+    }
 }

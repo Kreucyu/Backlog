@@ -44,7 +44,11 @@ public class UsuarioService {
 
     public void atualizarUsuario(long id, UpdateUsuarioDto updateUsuarioDto) {
         Usuario usuario = usuarioRepository.findById(id).get();
-        usuario.setNomeUsuario(updateUsuarioDto.getNomeUsuario());
-        usuario.setSenhaUsuario(updateUsuarioDto.getSenhaUsuario());
+        if(updateUsuarioDto.getNomeUsuario() != null || !updateUsuarioDto.getNomeUsuario().equals("")) {
+            usuario.setNomeUsuario(updateUsuarioDto.getNomeUsuario());
+        }
+        if(updateUsuarioDto.getSenhaUsuario() != null || !updateUsuarioDto.getSenhaUsuario().equals("")) {
+            usuario.setSenhaUsuario(updateUsuarioDto.getSenhaUsuario());
+        }
     }
 }

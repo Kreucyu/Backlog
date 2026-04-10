@@ -2,6 +2,7 @@ package com.backlog_user_service.user_service.controller;
 
 import com.backlog_user_service.user_service.dto.CreateUsuarioDto;
 import com.backlog_user_service.user_service.dto.RecoveryUsuarioDto;
+import com.backlog_user_service.user_service.dto.UpdateUsuarioDto;
 import com.backlog_user_service.user_service.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,8 +33,8 @@ public class UsuarioController {
     }
 
     @PatchMapping("/{id}")
-    private ResponseEntity<UpdateUsuarioDto> atualizarUsuario(@PathVariable Long id, @RequestBody UpdateUsuarioDto updateUsuarioDto) {
-        usuarioService.atualizarUsuario(updateUsuarioDto);
+    private ResponseEntity<String> atualizarUsuario(@PathVariable Long id, @RequestBody UpdateUsuarioDto updateUsuarioDto) {
+        usuarioService.atualizarUsuario(id, updateUsuarioDto);
         return ResponseEntity.status(HttpStatus.OK).body("Usuário atualizado com sucesso!");
     }
 

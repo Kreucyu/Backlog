@@ -1,5 +1,8 @@
 package com.backlog_user_service.user_service.dto;
 
+import jakarta.validation.constraints.Size;
+import lombok.*;
+
 @Getter
 @Setter
 @NoArgsConstructor

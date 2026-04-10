@@ -2,6 +2,7 @@ package com.backlog_user_service.user_service.service;
 
 import com.backlog_user_service.user_service.dto.CreateUsuarioDto;
 import com.backlog_user_service.user_service.dto.RecoveryUsuarioDto;
+import com.backlog_user_service.user_service.dto.UpdateUsuarioDto;
 import com.backlog_user_service.user_service.entity.Usuario;
 import com.backlog_user_service.user_service.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,8 @@ public class UsuarioService {
     }
 
     public void atualizarUsuario(long id, UpdateUsuarioDto updateUsuarioDto) {
-        Usuario usuario = usuarioRepository.findById(id).get;
-        usuario.set
-
+        Usuario usuario = usuarioRepository.findById(id).get();
+        usuario.setNomeUsuario(updateUsuarioDto.getNomeUsuario());
+        usuario.setSenhaUsuario(updateUsuarioDto.getSenhaUsuario());
     }
 }

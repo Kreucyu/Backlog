@@ -56,7 +56,7 @@ public class Usuario {
         this.emailUsuario = emailUsuario;
         this.senhaUsuario = senhaUsuario;
         this.jogosFavoritosUsuario = new ArrayList<>();
-        this.jogosBacklogUsuario = new ArrayList<>();
+        this.jogosWishlistUsuario = new ArrayList<>();
     }
 
     public void adicionarJogoAosFavoritos(JogoUsuario jogoUsuario) {
@@ -64,6 +64,6 @@ public class Usuario {
     }
 
     public void adicionarJogoNoBacklog(JogoUsuario jogoUsuario) {
-        this.jogosBacklogUsuario.add(jogoUsuario);
+        this.jogosWishlistUsuario.add(jogoUsuario);
     }
 }

@@ -14,8 +14,7 @@ import java.util.List;
 @Service
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
@@ -44,11 +43,12 @@ public class UsuarioService {
 
     public void atualizarUsuario(long id, UpdateUsuarioDto updateUsuarioDto) {
         Usuario usuario = usuarioRepository.findById(id).get();
-        if(updateUsuarioDto.getNomeUsuario() != null || !updateUsuarioDto.getNomeUsuario().equals("")) {
+        if(updateUsuarioDto.getNomeUsuario() != null || !updateUsuarioDto.getNomeUsuario().isEmpty()) {
             usuario.setNomeUsuario(updateUsuarioDto.getNomeUsuario());
         }
-        if(updateUsuarioDto.getSenhaUsuario() != null || !updateUsuarioDto.getSenhaUsuario().equals("")) {
+        if(updateUsuarioDto.getSenhaUsuario() != null || !updateUsuarioDto.getSenhaUsuario().isEmpty()) {
             usuario.setSenhaUsuario(updateUsuarioDto.getSenhaUsuario());
         }
+        System.out.println(usuario);
     }
 }

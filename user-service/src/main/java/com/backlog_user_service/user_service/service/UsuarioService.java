@@ -56,4 +56,15 @@ public class UsuarioService {
         }
         System.out.println(usuario);
     }
+
+    public RegisterUsuarioDto criarAdmin(RegisterUsuarioDto registerDto) {
+        String senhaCriptografada = new BCryptPasswordEncoder().encode(registerDto.senhaUsuario());
+        Usuario usuario = new Usuario(registerDto.nomeUsuario(),
+                registerDto.dataNascimento(),
+                registerDto.emailUsuario(),
+                senhaCriptografada,
+                NiveisUsuario.ADMIN);
+        usuarioRepository.save(usuario);
+        return registerDto;
+    }
 }

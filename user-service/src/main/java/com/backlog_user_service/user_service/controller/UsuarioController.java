@@ -22,7 +22,7 @@ public class UsuarioController {
     }
 
     @GetMapping
-    private ResponseEntity<List<RecoveryUsuarioDto>> listarUsuarios() {
+    public ResponseEntity<List<RecoveryUsuarioDto>> listarUsuarios() {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.listarUsuarios());
     }
 

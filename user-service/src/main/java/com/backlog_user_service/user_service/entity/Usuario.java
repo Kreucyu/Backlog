@@ -24,16 +24,16 @@ import java.util.List;
 @Getter
 @Setter
 @NotNull
-@ToString
 @NoArgsConstructor
 @Table(name = "usuarios")
+@ToString(exclude = {"jogosFavoritosUsuario", "jogosWishlistUsuario"})
 public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nomeUsuario;
 
     @Column(nullable = false)
@@ -41,7 +41,7 @@ public class Usuario implements UserDetails {
 
     @Email(message = "O Email não é válido.")
     @NotEmpty(message = "O Email não pode ser vazio.")
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String emailUsuario;
 
     @Size(min = 6, max = 100)

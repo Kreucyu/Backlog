@@ -49,6 +49,7 @@ public class Usuario implements UserDetails {
     private String senhaUsuario;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private NiveisUsuario niveisUsuario;
 
     @JsonManagedReference
@@ -85,12 +86,12 @@ public class Usuario implements UserDetails {
 
     @Override
     public @Nullable String getPassword() {
-        return "";
+        return this.senhaUsuario;
     }
 
     @Override
     public String getUsername() {
-        return nomeUsuario;
+        return this.emailUsuario;
     }
 
     @Override

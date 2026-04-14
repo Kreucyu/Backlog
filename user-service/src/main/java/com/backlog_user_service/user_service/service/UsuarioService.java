@@ -3,8 +3,10 @@ package com.backlog_user_service.user_service.service;
 import com.backlog_user_service.user_service.dto.Request.RegisterUsuarioDto;
 import com.backlog_user_service.user_service.dto.Response.RecoveryUsuarioDto;
 import com.backlog_user_service.user_service.dto.Request.UpdateUsuarioDto;
+import com.backlog_user_service.user_service.entity.NiveisUsuario;
 import com.backlog_user_service.user_service.entity.Usuario;
 import com.backlog_user_service.user_service.repository.UsuarioRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +21,12 @@ public class UsuarioService {
     }
 
     public RegisterUsuarioDto criarUsuario(RegisterUsuarioDto registerDto) {
+        String senhaCriptografada = new BCryptPasswordEncoder().encode(registerDto.senhaUsuario());
         Usuario usuario = new Usuario(registerDto.nomeUsuario(),
                 registerDto.dataNascimento(),
                 registerDto.emailUsuario(),
-                registerDto.senhaUsuario(),
-                registerDto.niveisUsuario());
+                senhaCriptografada,
+                NiveisUsuario.USER);
         usuarioRepository.save(usuario);
         return registerDto;
     }

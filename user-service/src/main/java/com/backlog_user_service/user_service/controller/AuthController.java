@@ -15,13 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationUsuarioDto authenticationDto) {
@@ -33,7 +35,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterUsuarioDto registerDto) {
         if(this.usuarioRepository.findByEmailUsuario(registerDto.emailUsuario()) != null) return ResponseEntity.badRequest().build();
-        UsuarioService usuarioService = new UsuarioService(usuarioRepository);
         usuarioService.criarUsuario(registerDto);
+        return ResponseEntity.ok().build();
     }
 }

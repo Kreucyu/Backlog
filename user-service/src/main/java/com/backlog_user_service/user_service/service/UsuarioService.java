@@ -38,7 +38,8 @@ public class UsuarioService {
                 .map(usuario ->
                         (new RecoveryUsuarioDto(usuario.getNomeUsuario(),
                                 usuario.getEmailUsuario(),
-                                usuario.getDataNascimento())))
+                                usuario.getDataNascimento(),
+                                usuario.getNiveisUsuario())))
                 .toList();
         return usuariosRecovery;
     }
@@ -66,5 +67,13 @@ public class UsuarioService {
                 NiveisUsuario.ADMIN);
         usuarioRepository.save(usuario);
         return registerDto;
+    }
+
+    public RecoveryUsuarioDto exibirUsuario(Usuario usuario) {
+        RecoveryUsuarioDto recovery = new RecoveryUsuarioDto(usuario.getNomeUsuario(),
+                usuario.getEmailUsuario(),
+                usuario.getDataNascimento(),
+                usuario.getNiveisUsuario());
+        return recovery;
     }
 }

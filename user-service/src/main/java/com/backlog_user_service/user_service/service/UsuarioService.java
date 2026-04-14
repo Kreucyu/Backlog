@@ -3,8 +3,10 @@ package com.backlog_user_service.user_service.service;
 import com.backlog_user_service.user_service.dto.Request.CreateUsuarioDto;
 import com.backlog_user_service.user_service.dto.Response.RecoveryUsuarioDto;
 import com.backlog_user_service.user_service.dto.Request.UpdateUsuarioDto;
+import com.backlog_user_service.user_service.entity.NiveisUsuario;
 import com.backlog_user_service.user_service.entity.Usuario;
 import com.backlog_user_service.user_service.repository.UsuarioRepository;
+import jakarta.validation.constraints.Null;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +21,11 @@ public class UsuarioService {
     }
 
     public CreateUsuarioDto criarUsuario(CreateUsuarioDto createUsuarioDto) {
-        Usuario usuario = new Usuario(createUsuarioDto.getNomeUsuario(),
-                createUsuarioDto.getDataNascimento(),
-                createUsuarioDto.getEmailUsuario(),
-                createUsuarioDto.getSenhaUsuario(),
-                createUsuarioDto.getNiveisUsuario());
+        Usuario usuario = new Usuario(createUsuarioDto.nomeUsuario(),
+                createUsuarioDto.dataNascimento(),
+                createUsuarioDto.emailUsuario(),
+                createUsuarioDto.senhaUsuario(),
+                NiveisUsuario.USER);
         usuarioRepository.save(usuario);
         return createUsuarioDto;
     }
@@ -42,11 +44,14 @@ public class UsuarioService {
 
     public void atualizarUsuario(long id, UpdateUsuarioDto updateUsuarioDto) {
         Usuario usuario = usuarioRepository.findById(id).get();
-        if(updateUsuarioDto.getNomeUsuario() != null || !updateUsuarioDto.getNomeUsuario().isEmpty()) {
-            usuario.setNomeUsuario(updateUsuarioDto.getNomeUsuario());
-        }
-        if(updateUsuarioDto.getSenhaUsuario() != null || !updateUsuarioDto.getSenhaUsuario().isEmpty()) {
-            usuario.setSenhaUsuario(updateUsuarioDto.getSenhaUsuario());
+        try {
+            if(!(updateUsuarioDto.nomeUsuario() == null || updateUsuarioDto.nomeUsuario().isEmpty()))
+                usuario.setNomeUsuario(updateUsuarioDto.nomeUsuario());
+            if(updateUsuarioDto.senhaUsuario() != null || !updateUsuarioDto.senhaUsuario().isEmpty()) {
+                usuario.setSenhaUsuario(updateUsuarioDto.senhaUsuario());
+            }
+        } catch (NullPointerException e) {
+            throw new RuntimeException("O valor não pode ser nulo.");
         }
         System.out.println(usuario);
     }

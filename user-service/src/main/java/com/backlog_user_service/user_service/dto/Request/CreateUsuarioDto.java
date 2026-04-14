@@ -13,6 +13,5 @@ public record CreateUsuarioDto(String nomeUsuario,
                                String emailUsuario,
                                @Size(min = 6, max = 100)
                                String senhaUsuario,
-                               LocalDate dataNascimento,
-                               NiveisUsuario niveisUsuario) {
+                               LocalDate dataNascimento) {
 }

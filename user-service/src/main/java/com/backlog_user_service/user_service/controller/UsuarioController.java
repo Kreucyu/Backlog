@@ -1,6 +1,5 @@
 package com.backlog_user_service.user_service.controller;
 
-import com.backlog_user_service.user_service.dto.Request.CreateUsuarioDto;
 import com.backlog_user_service.user_service.dto.Response.RecoveryUsuarioDto;
 import com.backlog_user_service.user_service.dto.Request.UpdateUsuarioDto;
 import com.backlog_user_service.user_service.service.UsuarioService;
@@ -20,11 +19,6 @@ public class UsuarioController {
 
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
-    }
-
-    @PostMapping
-    private ResponseEntity<CreateUsuarioDto> criarUsuario(@RequestBody CreateUsuarioDto createUsuarioDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.criarUsuario(createUsuarioDto));
     }
 
     @GetMapping

@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
-public record AuthenticationDto(
+public record AuthenticationUsuarioDto(
         @Email(message = "O Email não é válido.")
         @NotEmpty(message = "O Email não pode ser vazio.")
         String emailUsuario,

@@ -1,12 +1,10 @@
 package com.backlog_user_service.user_service.service;
 
-import com.backlog_user_service.user_service.dto.Request.CreateUsuarioDto;
+import com.backlog_user_service.user_service.dto.Request.RegisterUsuarioDto;
 import com.backlog_user_service.user_service.dto.Response.RecoveryUsuarioDto;
 import com.backlog_user_service.user_service.dto.Request.UpdateUsuarioDto;
-import com.backlog_user_service.user_service.entity.NiveisUsuario;
 import com.backlog_user_service.user_service.entity.Usuario;
 import com.backlog_user_service.user_service.repository.UsuarioRepository;
-import jakarta.validation.constraints.Null;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,14 +18,14 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public CreateUsuarioDto criarUsuario(CreateUsuarioDto createUsuarioDto) {
-        Usuario usuario = new Usuario(createUsuarioDto.nomeUsuario(),
-                createUsuarioDto.dataNascimento(),
-                createUsuarioDto.emailUsuario(),
-                createUsuarioDto.senhaUsuario(),
-                NiveisUsuario.USER);
+    public RegisterUsuarioDto criarUsuario(RegisterUsuarioDto registerDto) {
+        Usuario usuario = new Usuario(registerDto.nomeUsuario(),
+                registerDto.dataNascimento(),
+                registerDto.emailUsuario(),
+                registerDto.senhaUsuario(),
+                registerDto.niveisUsuario());
         usuarioRepository.save(usuario);
-        return createUsuarioDto;
+        return registerDto;
     }
 
     public List<RecoveryUsuarioDto> listarUsuarios() {

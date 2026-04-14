@@ -22,7 +22,8 @@ public class UsuarioService {
         Usuario usuario = new Usuario(createUsuarioDto.getNomeUsuario(),
                 createUsuarioDto.getDataNascimento(),
                 createUsuarioDto.getEmailUsuario(),
-                createUsuarioDto.getSenhaUsuario());
+                createUsuarioDto.getSenhaUsuario(),
+                createUsuarioDto.getNiveisUsuario());
         usuarioRepository.save(usuario);
         return createUsuarioDto;
     }

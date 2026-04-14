@@ -59,11 +59,12 @@ public class Usuario implements UserDetails {
     @JsonManagedReference
     private List<JogoUsuario> jogosWishlistUsuario;
 
-    public Usuario(String nomeUsuario, LocalDate dataNascimento, String emailUsuario, String senhaUsuario) {
+    public Usuario(String nomeUsuario, LocalDate dataNascimento, String emailUsuario, String senhaUsuario, NiveisUsuario niveisUsuario) {
         this.nomeUsuario = nomeUsuario;
         this.dataNascimento = dataNascimento;
         this.emailUsuario = emailUsuario;
         this.senhaUsuario = senhaUsuario;
+        this.niveisUsuario = niveisUsuario;
         this.jogosFavoritosUsuario = new ArrayList<>();
         this.jogosWishlistUsuario = new ArrayList<>();
     }

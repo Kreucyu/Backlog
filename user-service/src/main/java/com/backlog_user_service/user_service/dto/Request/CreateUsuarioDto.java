@@ -1,5 +1,6 @@
 package com.backlog_user_service.user_service.dto.Request;
 
+import com.backlog_user_service.user_service.entity.NiveisUsuario;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -20,5 +21,5 @@ public class CreateUsuarioDto {
     @Size(min = 6, max = 100)
     private String senhaUsuario;
     private LocalDate dataNascimento;
-    private int nivelNoSistema;
+    private NiveisUsuario niveisUsuario;
 }

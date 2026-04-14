@@ -49,10 +49,4 @@ public class AuthController {
         usuarioService.criarUsuario(registerDto);
         return ResponseEntity.ok("Usuário registrado com sucesso");
     }
-
-    @PostMapping("/registerAdmin")
-    public ResponseEntity<String> registerAdmin(@RequestBody @Valid RegisterUsuarioDto registerDto) {
-        usuarioService.criarAdmin(registerDto);
-        return ResponseEntity.ok("Admin registrado com sucesso");
-    }
 }

@@ -7,19 +7,12 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDate;
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-public class CreateUsuarioDto {
-    private String nomeUsuario;
-    @Email(message = "O Email não é válido.")
-    @NotEmpty(message = "O Email não pode ser vazio.")
-    private String emailUsuario;
-    @Size(min = 6, max = 100)
-    private String senhaUsuario;
-    private LocalDate dataNascimento;
-    private NiveisUsuario niveisUsuario;
+public record CreateUsuarioDto(String nomeUsuario,
+                               @Email(message = "O Email não é válido.")
+                               @NotEmpty(message = "O Email não pode ser vazio.")
+                               String emailUsuario,
+                               @Size(min = 6, max = 100)
+                               String senhaUsuario,
+                               LocalDate dataNascimento,
+                               NiveisUsuario niveisUsuario) {
 }

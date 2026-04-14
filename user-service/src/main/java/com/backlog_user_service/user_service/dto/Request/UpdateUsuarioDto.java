@@ -1,4 +1,4 @@
-package com.backlog_user_service.user_service.dto;
+package com.backlog_user_service.user_service.dto.Request;
 
 import jakarta.validation.constraints.Size;
 import lombok.*;

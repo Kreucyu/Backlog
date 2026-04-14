@@ -1,8 +1,8 @@
 package com.backlog_user_service.user_service.controller;
 
-import com.backlog_user_service.user_service.dto.CreateUsuarioDto;
-import com.backlog_user_service.user_service.dto.RecoveryUsuarioDto;
-import com.backlog_user_service.user_service.dto.UpdateUsuarioDto;
+import com.backlog_user_service.user_service.dto.Request.CreateUsuarioDto;
+import com.backlog_user_service.user_service.dto.Response.RecoveryUsuarioDto;
+import com.backlog_user_service.user_service.dto.Request.UpdateUsuarioDto;
 import com.backlog_user_service.user_service.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

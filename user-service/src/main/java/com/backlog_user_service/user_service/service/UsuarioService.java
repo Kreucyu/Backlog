@@ -1,14 +1,12 @@
 package com.backlog_user_service.user_service.service;
 
-import com.backlog_user_service.user_service.dto.CreateUsuarioDto;
-import com.backlog_user_service.user_service.dto.RecoveryUsuarioDto;
-import com.backlog_user_service.user_service.dto.UpdateUsuarioDto;
+import com.backlog_user_service.user_service.dto.Request.CreateUsuarioDto;
+import com.backlog_user_service.user_service.dto.Response.RecoveryUsuarioDto;
+import com.backlog_user_service.user_service.dto.Request.UpdateUsuarioDto;
 import com.backlog_user_service.user_service.entity.Usuario;
 import com.backlog_user_service.user_service.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

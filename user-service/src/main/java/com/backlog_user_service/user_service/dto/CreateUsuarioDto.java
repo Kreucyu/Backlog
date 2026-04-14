@@ -20,4 +20,5 @@ public class CreateUsuarioDto {
     @Size(min = 6, max = 100)
     private String senhaUsuario;
     private LocalDate dataNascimento;
+    private int nivelNoSistema;
 }

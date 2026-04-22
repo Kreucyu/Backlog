@@ -6,18 +6,15 @@ import com.backlog_user_service.user_service.dto.Request.UpdateUsuarioDto;
 import com.backlog_user_service.user_service.entity.Usuario;
 import com.backlog_user_service.user_service.exceptions.UsuarioInexistenteException;
 import com.backlog_user_service.user_service.exceptions.ValoresVaziosException;
-import com.backlog_user_service.user_service.repository.UsuarioRepository;
 import com.backlog_user_service.user_service.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -53,7 +50,17 @@ public class UsuarioController {
     @GetMapping("/me")
     public ResponseEntity<RecoveryUsuarioDto> me() {
         var usuario = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.exibirUsuario((Usuario) usuario));
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.exibirUsuarioUser((Usuario) usuario));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getByID(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(usuarioService.exibirUsuarioId(id).toString());
+        } catch (UsuarioInexistenteException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
     }
 
 }

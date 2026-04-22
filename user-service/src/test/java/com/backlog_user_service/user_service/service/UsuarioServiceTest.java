@@ -203,6 +203,18 @@ class UsuarioServiceTest {
     }
 
     @Test
-    void exibirUsuario() {
+    void exibirUsuarioUser() {
+    }
+
+    @Test
+    void exibirUsuarioUserInexistente() {
+    }
+
+    @Test
+    void exibirUsuarioId() {
+    }
+
+    @Test
+    void exibirUsuarioIdInexistente() {
     }
 }

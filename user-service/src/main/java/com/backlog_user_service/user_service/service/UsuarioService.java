@@ -11,7 +11,6 @@ import com.backlog_user_service.user_service.exceptions.UsuarioInexistenteExcept
 import com.backlog_user_service.user_service.exceptions.ValoresVaziosException;
 import com.backlog_user_service.user_service.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,10 +37,7 @@ public class UsuarioService {
 
     public List<RecoveryUsuarioDto> listarUsuarios() {
         List<Usuario> usuariosListados = this.usuarioRepository.findAll();
-        return usuariosListados
-                .stream()
-                .map(this::exibirUsuario)
-                .toList();
+        return usuariosListados.stream().map(this::exibirUsuarioUser).toList();
     }
 
     public void atualizarUsuario(long id, UpdateUsuarioDto updateUsuarioDto) {
@@ -72,7 +68,18 @@ public class UsuarioService {
         return ResponseEntity.ok("Admin registrado com sucesso");
     }
 
-    public RecoveryUsuarioDto exibirUsuario(Usuario usuario) {
+    public RecoveryUsuarioDto exibirUsuarioUser(Usuario usuario) {
+        return new RecoveryUsuarioDto(usuario.getNomeUsuario(),
+                usuario.getEmailUsuario(),
+                usuario.getDataNascimento(),
+                usuario.getNiveisUsuario());
+    }
+
+    public RecoveryUsuarioDto exibirUsuarioId(Long id) {
+        if(!usuarioRepository.existsById(id)) throw new UsuarioInexistenteException("Usuário não encontrado");
+
+        Usuario usuario = usuarioRepository.findById(id).get();
+
         return new RecoveryUsuarioDto(usuario.getNomeUsuario(),
                 usuario.getEmailUsuario(),
                 usuario.getDataNascimento(),

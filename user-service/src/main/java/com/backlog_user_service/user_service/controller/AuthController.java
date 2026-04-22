@@ -5,6 +5,7 @@ import com.backlog_user_service.user_service.dto.Request.RegisterUsuarioDto;
 import com.backlog_user_service.user_service.dto.Response.LoginResponseDto;
 import com.backlog_user_service.user_service.entity.Usuario;
 import com.backlog_user_service.user_service.repository.UsuarioRepository;
+import com.backlog_user_service.user_service.service.AuthService;
 import com.backlog_user_service.user_service.service.TokenService;
 import com.backlog_user_service.user_service.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -25,21 +26,13 @@ import java.util.Objects;
 public class AuthController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-    @Autowired
     private UsuarioService usuarioService;
     @Autowired
-    private TokenService tokenService;
+    private AuthService authService;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody @Valid AuthenticationUsuarioDto authenticationDto) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(authenticationDto.emailUsuario(), authenticationDto.senhaUsuario());
-        var autenticacao = this.authenticationManager.authenticate(usernamePassword);
-        var token = tokenService.generateToken((Usuario) Objects.requireNonNull(autenticacao.getPrincipal()));
-        System.out.println("token controller: " + token);
-        return ResponseEntity.ok(new LoginResponseDto(token));
+        return authService.logarUsuario(authenticationDto);
     }
 
     @PostMapping("/register")

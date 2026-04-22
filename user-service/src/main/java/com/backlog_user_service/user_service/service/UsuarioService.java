@@ -22,7 +22,7 @@ public class UsuarioService {
 
     public ResponseEntity<String> criarUsuario(RegisterUsuarioDto registerDto) {
         if(this.usuarioRepository.findByEmailUsuario(registerDto.emailUsuario()) != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email já cadastrado");
-        if(this.usuarioRepository.existsUsuarioByNomeUsuario(registerDto.nomeUsuario())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O Nome de usuário já está em uso");
+        if(this.usuarioRepository.existsUsuarioByNomeUsuario(registerDto.nomeUsuario())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O nome de usuário já está em uso");
         String senhaCriptografada = new BCryptPasswordEncoder().encode(registerDto.senhaUsuario());
         Usuario usuario = new Usuario(registerDto.nomeUsuario(),
                 registerDto.dataNascimento(),
@@ -54,7 +54,7 @@ public class UsuarioService {
 
     public ResponseEntity<String> criarAdmin(RegisterUsuarioDto registerDto) {
         if(this.usuarioRepository.findByEmailUsuario(registerDto.emailUsuario()) != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email já cadastrado");
-        if(this.usuarioRepository.existsUsuarioByNomeUsuario(registerDto.nomeUsuario())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O Nome de usuário já está em uso");
+        if(this.usuarioRepository.existsUsuarioByNomeUsuario(registerDto.nomeUsuario())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O nome de usuário já está em uso");
         String senhaCriptografada = new BCryptPasswordEncoder().encode(registerDto.senhaUsuario());
         Usuario usuario = new Usuario(registerDto.nomeUsuario(),
                 registerDto.dataNascimento(),

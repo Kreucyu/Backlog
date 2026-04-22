@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -38,6 +37,8 @@ class UsuarioServiceTest {
         ResponseEntity<String> resposta = usuarioService.criarUsuario(registerUsuarioDto);
         Assertions.assertEquals("Usuário registrado com sucesso", resposta.getBody());
         verify(usuarioRepository, times(1)).save(any());
+        verify(usuarioRepository, times(1)).findByEmailUsuario(any());
+        verify(usuarioRepository, times(1)).existsUsuarioByNomeUsuario(any());
     }
 
     @Test
@@ -48,16 +49,25 @@ class UsuarioServiceTest {
                 "MarcioMM@gmail.com",
                 senhaCriptografada,
                 NiveisUsuario.USER);
-        usuarioRepository.save(usuario);
         when(usuarioRepository.findByEmailUsuario("MarcioMM@gmail.com")).thenReturn(usuario);
         RegisterUsuarioDto registerUsuarioDto = new RegisterUsuarioDto("Junior", "MarcioMM@gmail.com", "Marcio123@", LocalDate.now());
         ResponseEntity<String> resposta = usuarioService.criarUsuario(registerUsuarioDto);
         Assertions.assertEquals("Email já cadastrado", resposta.getBody());
-        verify(usuarioRepository, times(1)).save(any());
+        verify(usuarioRepository, never()).save(any());
+        verify(usuarioRepository, times(1)).findByEmailUsuario(any());
+        verify(usuarioRepository, times(1)).existsUsuarioByNomeUsuario(any());
     }
 
     @Test
     void criarUsuarioNomeJaUtilizado() {
+        String senhaCriptografada = new BCryptPasswordEncoder().encode("Marcio123@");
+        when(usuarioRepository.existsUsuarioByNomeUsuario("Marcio")).thenReturn(true);
+        RegisterUsuarioDto registerUsuarioDto = new RegisterUsuarioDto("Marcio", "Marcio123@gmail.com", "Marcio123@", LocalDate.now());
+        ResponseEntity<String> resposta = usuarioService.criarUsuario(registerUsuarioDto);
+        Assertions.assertEquals("O nome de usuário já está em uso", resposta.getBody());
+        verify(usuarioRepository, never()).save(any());
+        verify(usuarioRepository, times(1)).findByEmailUsuario(any());
+        verify(usuarioRepository, times(1)).existsUsuarioByNomeUsuario(any());
     }
 
 

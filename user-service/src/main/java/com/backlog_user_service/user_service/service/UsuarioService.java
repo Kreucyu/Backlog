@@ -5,6 +5,8 @@ import com.backlog_user_service.user_service.dto.Response.RecoveryUsuarioDto;
 import com.backlog_user_service.user_service.dto.Request.UpdateUsuarioDto;
 import com.backlog_user_service.user_service.entity.NiveisUsuario;
 import com.backlog_user_service.user_service.entity.Usuario;
+import com.backlog_user_service.user_service.exceptions.EmailDuplicadoException;
+import com.backlog_user_service.user_service.exceptions.NomeDeUsuarioDuplicadoException;
 import com.backlog_user_service.user_service.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,9 +22,9 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public ResponseEntity<String> criarUsuario(RegisterUsuarioDto registerDto) {
-        if(this.usuarioRepository.findByEmailUsuario(registerDto.emailUsuario()) != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email já cadastrado");
-        if(this.usuarioRepository.existsUsuarioByNomeUsuario(registerDto.nomeUsuario())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O nome de usuário já está em uso");
+    public String criarUsuario(RegisterUsuarioDto registerDto) {
+        if(this.usuarioRepository.findByEmailUsuario(registerDto.emailUsuario()) != null) throw new EmailDuplicadoException("Email já cadastrado.");
+        if(this.usuarioRepository.existsUsuarioByNomeUsuario(registerDto.nomeUsuario())) throw new NomeDeUsuarioDuplicadoException("O nome de usuário já está em uso.");
         String senhaCriptografada = new BCryptPasswordEncoder().encode(registerDto.senhaUsuario());
         Usuario usuario = new Usuario(registerDto.nomeUsuario(),
                 registerDto.dataNascimento(),
@@ -30,7 +32,7 @@ public class UsuarioService {
                 senhaCriptografada,
                 NiveisUsuario.USER);
         usuarioRepository.save(usuario);
-        return ResponseEntity.ok("Usuário registrado com sucesso");
+        return "Usuário registrado com sucesso";
     }
 
     public List<RecoveryUsuarioDto> listarUsuarios() {
@@ -53,8 +55,8 @@ public class UsuarioService {
     }
 
     public ResponseEntity<String> criarAdmin(RegisterUsuarioDto registerDto) {
-        if(this.usuarioRepository.findByEmailUsuario(registerDto.emailUsuario()) != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email já cadastrado");
-        if(this.usuarioRepository.existsUsuarioByNomeUsuario(registerDto.nomeUsuario())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O nome de usuário já está em uso");
+        if(this.usuarioRepository.findByEmailUsuario(registerDto.emailUsuario()) != null) throw new EmailDuplicadoException("Email já cadastrado.");
+        if(this.usuarioRepository.existsUsuarioByNomeUsuario(registerDto.nomeUsuario())) throw new NomeDeUsuarioDuplicadoException("O nome de usuário já está em uso.");
         String senhaCriptografada = new BCryptPasswordEncoder().encode(registerDto.senhaUsuario());
         Usuario usuario = new Usuario(registerDto.nomeUsuario(),
                 registerDto.dataNascimento(),

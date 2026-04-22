@@ -4,6 +4,8 @@ import com.backlog_user_service.user_service.dto.Request.AuthenticationUsuarioDt
 import com.backlog_user_service.user_service.dto.Request.RegisterUsuarioDto;
 import com.backlog_user_service.user_service.dto.Response.LoginResponseDto;
 import com.backlog_user_service.user_service.entity.Usuario;
+import com.backlog_user_service.user_service.exceptions.EmailDuplicadoException;
+import com.backlog_user_service.user_service.exceptions.NomeDeUsuarioDuplicadoException;
 import com.backlog_user_service.user_service.repository.UsuarioRepository;
 import com.backlog_user_service.user_service.service.AuthService;
 import com.backlog_user_service.user_service.service.TokenService;
@@ -37,6 +39,10 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid RegisterUsuarioDto registerDto) {
-        return usuarioService.criarUsuario(registerDto);
+        try {
+            return ResponseEntity.ok(usuarioService.criarUsuario(registerDto));
+        } catch (EmailDuplicadoException | NomeDeUsuarioDuplicadoException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }

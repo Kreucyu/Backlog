@@ -6,6 +6,7 @@ import com.backlog_user_service.user_service.dto.Request.UpdateUsuarioDto;
 import com.backlog_user_service.user_service.entity.NiveisUsuario;
 import com.backlog_user_service.user_service.entity.Usuario;
 import com.backlog_user_service.user_service.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,11 +17,8 @@ import java.util.List;
 @Service
 public class UsuarioService {
 
-    private final UsuarioRepository usuarioRepository;
-
-    public UsuarioService(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
-    }
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     public ResponseEntity<String> criarUsuario(RegisterUsuarioDto registerDto) {
         if(this.usuarioRepository.findByEmailUsuario(registerDto.emailUsuario()) != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email já cadastrado");

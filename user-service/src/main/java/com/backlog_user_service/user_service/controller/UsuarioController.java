@@ -23,8 +23,6 @@ public class UsuarioController {
 
     @Autowired
     private final UsuarioService usuarioService;
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;

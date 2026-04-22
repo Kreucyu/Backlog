@@ -39,11 +39,7 @@ public class UsuarioService {
         List<Usuario> usuariosListados = this.usuarioRepository.findAll();
         return usuariosListados
                 .stream()
-                .map(usuario ->
-                        (new RecoveryUsuarioDto(usuario.getNomeUsuario(),
-                                usuario.getEmailUsuario(),
-                                usuario.getDataNascimento(),
-                                usuario.getNiveisUsuario())))
+                .map(this::exibirUsuario)
                 .toList();
     }
 
@@ -72,10 +68,9 @@ public class UsuarioService {
     }
 
     public RecoveryUsuarioDto exibirUsuario(Usuario usuario) {
-        RecoveryUsuarioDto recovery = new RecoveryUsuarioDto(usuario.getNomeUsuario(),
+        return new RecoveryUsuarioDto(usuario.getNomeUsuario(),
                 usuario.getEmailUsuario(),
                 usuario.getDataNascimento(),
                 usuario.getNiveisUsuario());
-        return recovery;
     }
 }

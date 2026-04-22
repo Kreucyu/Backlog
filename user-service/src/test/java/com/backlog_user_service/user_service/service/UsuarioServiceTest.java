@@ -1,6 +1,7 @@
 package com.backlog_user_service.user_service.service;
 
 import com.backlog_user_service.user_service.dto.Request.RegisterUsuarioDto;
+import com.backlog_user_service.user_service.dto.Response.RecoveryUsuarioDto;
 import com.backlog_user_service.user_service.entity.NiveisUsuario;
 import com.backlog_user_service.user_service.entity.Usuario;
 import com.backlog_user_service.user_service.exceptions.EmailDuplicadoException;
@@ -16,7 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import static java.lang.IO.println;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -73,6 +77,40 @@ class UsuarioServiceTest {
 
     @Test
     void listarUsuarios() {
+        String senhaCriptografada = new BCryptPasswordEncoder().encode("Marcio123@");
+        Usuario usuario1 = new Usuario("Marcio1",
+                LocalDate.now(),
+                "MarcioMM1@gmail.com",
+                senhaCriptografada,
+                NiveisUsuario.USER);
+        Usuario usuario2 = new Usuario("Marcio2",
+                LocalDate.now(),
+                "MarcioMM2@gmail.com",
+                senhaCriptografada,
+                NiveisUsuario.USER);
+        Usuario usuario3 = new Usuario("Marcio3",
+                LocalDate.now(),
+                "MarcioMM3@gmail.com",
+                senhaCriptografada,
+                NiveisUsuario.USER);
+        Usuario usuario4 = new Usuario("Marcio4",
+                LocalDate.now(),
+                "MarcioMM4@gmail.com",
+                senhaCriptografada,
+                NiveisUsuario.USER);
+
+        List<Usuario> usuarioList = new ArrayList<>();
+
+        usuarioList.add(usuario1);
+        usuarioList.add(usuario2);
+        usuarioList.add(usuario3);
+        usuarioList.add(usuario4);
+
+        when(usuarioRepository.findAll()).thenReturn(usuarioList);
+
+        usuarioService.listarUsuarios().forEach(System.out::println);
+
+        verify(usuarioRepository, times(1)).findAll();
     }
 
     @Test

@@ -37,7 +37,7 @@ public class UsuarioService {
 
     public List<RecoveryUsuarioDto> listarUsuarios() {
         List<Usuario> usuariosListados = this.usuarioRepository.findAll();
-        List<RecoveryUsuarioDto> usuariosRecovery = usuariosListados
+        return usuariosListados
                 .stream()
                 .map(usuario ->
                         (new RecoveryUsuarioDto(usuario.getNomeUsuario(),
@@ -45,24 +45,22 @@ public class UsuarioService {
                                 usuario.getDataNascimento(),
                                 usuario.getNiveisUsuario())))
                 .toList();
-        return usuariosRecovery;
     }
 
-    public void atualizarUsuario(long id, UpdateUsuarioDto updateUsuarioDto) {
+    public ResponseEntity<String> atualizarUsuario(long id, UpdateUsuarioDto updateUsuarioDto) {
         Usuario usuario = usuarioRepository.findById(id).get();
         try {
-            if(!(updateUsuarioDto.nomeUsuario() == null || updateUsuarioDto.nomeUsuario().isEmpty()))
-                usuario.setNomeUsuario(updateUsuarioDto.nomeUsuario());
-            if(updateUsuarioDto.senhaUsuario() != null || !updateUsuarioDto.senhaUsuario().isEmpty()) {
-                usuario.setSenhaUsuario(updateUsuarioDto.senhaUsuario());
-            }
+            if(!updateUsuarioDto.nomeUsuario().isEmpty()) usuario.setNomeUsuario(updateUsuarioDto.nomeUsuario());
+            if(!updateUsuarioDto.senhaUsuario().isEmpty()) usuario.setSenhaUsuario(updateUsuarioDto.senhaUsuario());
         } catch (NullPointerException e) {
-            throw new RuntimeException("O valor não pode ser nulo.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O valor não pode ser nulo.");
         }
-        System.out.println(usuario);
+        return ResponseEntity.status(HttpStatus.OK).body("Usuário atualizado com sucesso!");
     }
 
-    public RegisterUsuarioDto criarAdmin(RegisterUsuarioDto registerDto) {
+    public ResponseEntity<String> criarAdmin(RegisterUsuarioDto registerDto) {
+        if(this.usuarioRepository.findByEmailUsuario(registerDto.emailUsuario()) != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email já cadastrado");
+        if(this.usuarioRepository.existsUsuarioByNomeUsuario(registerDto.nomeUsuario())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O Nome de usuário já está em uso");
         String senhaCriptografada = new BCryptPasswordEncoder().encode(registerDto.senhaUsuario());
         Usuario usuario = new Usuario(registerDto.nomeUsuario(),
                 registerDto.dataNascimento(),
@@ -70,7 +68,7 @@ public class UsuarioService {
                 senhaCriptografada,
                 NiveisUsuario.ADMIN);
         usuarioRepository.save(usuario);
-        return registerDto;
+        return ResponseEntity.ok("Admin registrado com sucesso");
     }
 
     public RecoveryUsuarioDto exibirUsuario(Usuario usuario) {

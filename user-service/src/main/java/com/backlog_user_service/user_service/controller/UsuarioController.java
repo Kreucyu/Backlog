@@ -37,16 +37,12 @@ public class UsuarioController {
 
     @PatchMapping("/{id}")
     private ResponseEntity<String> atualizarUsuario(@PathVariable Long id, @RequestBody UpdateUsuarioDto updateUsuarioDto) {
-        usuarioService.atualizarUsuario(id, updateUsuarioDto);
-        return ResponseEntity.status(HttpStatus.OK).body("Usuário atualizado com sucesso!");
+        return usuarioService.atualizarUsuario(id, updateUsuarioDto);
     }
 
     @PostMapping("/novoAdmin")
     public ResponseEntity<String> registerAdmin(@RequestBody @Valid RegisterUsuarioDto registerDto) {
-        if(this.usuarioRepository.findByEmailUsuario(registerDto.emailUsuario()) != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email já cadastrado");
-        if(this.usuarioRepository.existsUsuarioByNomeUsuario(registerDto.nomeUsuario())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O Nome de usuário já está em uso");
-        usuarioService.criarAdmin(registerDto);
-        return ResponseEntity.ok("Admin registrado com sucesso");
+        return usuarioService.criarAdmin(registerDto);
     }
 
     @GetMapping("/me")

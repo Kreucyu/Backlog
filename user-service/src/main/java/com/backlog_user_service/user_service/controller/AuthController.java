@@ -40,7 +40,8 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid RegisterUsuarioDto registerDto) {
         try {
-            return ResponseEntity.ok(usuarioService.criarUsuario(registerDto));
+            usuarioService.criarUsuario(registerDto);
+            return ResponseEntity.ok("Usuário criado com sucesso");
         } catch (EmailDuplicadoException | NomeDeUsuarioDuplicadoException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

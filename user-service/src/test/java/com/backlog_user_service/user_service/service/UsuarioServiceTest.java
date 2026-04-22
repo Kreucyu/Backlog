@@ -36,11 +36,10 @@ class UsuarioServiceTest {
     @Test
     void criarUsuarioSucesso() {
         RegisterUsuarioDto registerUsuarioDto = new RegisterUsuarioDto("Marcio", "MarcioMM@gmail.com", "Marcio123@", LocalDate.now());
-        String resposta = usuarioService.criarUsuario(registerUsuarioDto);
-        Assertions.assertEquals("Usuário registrado com sucesso", resposta);
+        usuarioService.criarUsuario(registerUsuarioDto);
         verify(usuarioRepository, times(1)).save(any());
-        verify(usuarioRepository, times(1)).findByEmailUsuario(any());
-        verify(usuarioRepository, times(1)).existsUsuarioByNomeUsuario(any());
+        verify(usuarioRepository, times(1)).findByEmailUsuario("MarcioMM@gmail.com");
+        verify(usuarioRepository, times(1)).existsUsuarioByNomeUsuario("Marcio");
     }
 
     @Test
@@ -56,8 +55,8 @@ class UsuarioServiceTest {
         Exception thrown = Assertions.assertThrows(EmailDuplicadoException.class, () -> usuarioService.criarUsuario(registerUsuarioDto));
         Assertions.assertEquals("Email já cadastrado.", thrown.getMessage());
         verify(usuarioRepository, never()).save(any());
-        verify(usuarioRepository, times(1)).findByEmailUsuario(any());
-        verify(usuarioRepository, never()).existsUsuarioByNomeUsuario(any());
+        verify(usuarioRepository, times(1)).findByEmailUsuario("MarcioMM@gmail.com");
+        verify(usuarioRepository, never()).existsUsuarioByNomeUsuario("Marcio");
     }
 
     @Test
@@ -67,8 +66,8 @@ class UsuarioServiceTest {
         Exception thrown = Assertions.assertThrows(NomeDeUsuarioDuplicadoException.class, () -> usuarioService.criarUsuario(registerUsuarioDto));
         Assertions.assertEquals("O nome de usuário já está em uso.", thrown.getMessage());
         verify(usuarioRepository, never()).save(any());
-        verify(usuarioRepository, times(1)).findByEmailUsuario(any());
-        verify(usuarioRepository, times(1)).existsUsuarioByNomeUsuario(any());
+        verify(usuarioRepository, times(1)).findByEmailUsuario("Marcio123@gmail.com");
+        verify(usuarioRepository, times(1)).existsUsuarioByNomeUsuario("Marcio");
     }
 
 

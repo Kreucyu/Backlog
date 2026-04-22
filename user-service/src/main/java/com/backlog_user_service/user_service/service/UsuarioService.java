@@ -22,7 +22,7 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public String criarUsuario(RegisterUsuarioDto registerDto) {
+    public void criarUsuario(RegisterUsuarioDto registerDto) {
         if(this.usuarioRepository.findByEmailUsuario(registerDto.emailUsuario()) != null) throw new EmailDuplicadoException("Email já cadastrado.");
         if(this.usuarioRepository.existsUsuarioByNomeUsuario(registerDto.nomeUsuario())) throw new NomeDeUsuarioDuplicadoException("O nome de usuário já está em uso.");
         String senhaCriptografada = new BCryptPasswordEncoder().encode(registerDto.senhaUsuario());
@@ -32,7 +32,6 @@ public class UsuarioService {
                 senhaCriptografada,
                 NiveisUsuario.USER);
         usuarioRepository.save(usuario);
-        return "Usuário registrado com sucesso";
     }
 
     public List<RecoveryUsuarioDto> listarUsuarios() {

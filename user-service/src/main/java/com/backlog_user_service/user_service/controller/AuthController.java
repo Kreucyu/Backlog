@@ -44,9 +44,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid RegisterUsuarioDto registerDto) {
-        if(this.usuarioRepository.findByEmailUsuario(registerDto.emailUsuario()) != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email já cadastrado");
-        if(this.usuarioRepository.existsUsuarioByNomeUsuario(registerDto.nomeUsuario())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O Nome de usuário já está em uso");
-        usuarioService.criarUsuario(registerDto);
-        return ResponseEntity.ok("Usuário registrado com sucesso");
+        return usuarioService.criarUsuario(registerDto);
     }
 }

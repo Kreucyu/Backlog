@@ -6,6 +6,8 @@ import com.backlog_user_service.user_service.dto.Request.UpdateUsuarioDto;
 import com.backlog_user_service.user_service.entity.NiveisUsuario;
 import com.backlog_user_service.user_service.entity.Usuario;
 import com.backlog_user_service.user_service.repository.UsuarioRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,9 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public RegisterUsuarioDto criarUsuario(RegisterUsuarioDto registerDto) {
+    public ResponseEntity<String> criarUsuario(RegisterUsuarioDto registerDto) {
+        if(this.usuarioRepository.findByEmailUsuario(registerDto.emailUsuario()) != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email já cadastrado");
+        if(this.usuarioRepository.existsUsuarioByNomeUsuario(registerDto.nomeUsuario())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O Nome de usuário já está em uso");
         String senhaCriptografada = new BCryptPasswordEncoder().encode(registerDto.senhaUsuario());
         Usuario usuario = new Usuario(registerDto.nomeUsuario(),
                 registerDto.dataNascimento(),
@@ -28,7 +32,7 @@ public class UsuarioService {
                 senhaCriptografada,
                 NiveisUsuario.USER);
         usuarioRepository.save(usuario);
-        return registerDto;
+        return ResponseEntity.ok("Usuário registrado com sucesso");
     }
 
     public List<RecoveryUsuarioDto> listarUsuarios() {

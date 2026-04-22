@@ -1,11 +1,14 @@
 package com.backlog_user_service.user_service.service;
 
 import com.backlog_user_service.user_service.dto.Request.RegisterUsuarioDto;
+import com.backlog_user_service.user_service.dto.Request.UpdateUsuarioDto;
 import com.backlog_user_service.user_service.dto.Response.RecoveryUsuarioDto;
 import com.backlog_user_service.user_service.entity.NiveisUsuario;
 import com.backlog_user_service.user_service.entity.Usuario;
 import com.backlog_user_service.user_service.exceptions.EmailDuplicadoException;
 import com.backlog_user_service.user_service.exceptions.NomeDeUsuarioDuplicadoException;
+import com.backlog_user_service.user_service.exceptions.UsuarioInexistenteException;
+import com.backlog_user_service.user_service.exceptions.ValoresVaziosException;
 import com.backlog_user_service.user_service.repository.UsuarioRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.IO.println;
 import static org.mockito.ArgumentMatchers.any;
@@ -108,13 +112,61 @@ class UsuarioServiceTest {
 
         when(usuarioRepository.findAll()).thenReturn(usuarioList);
 
+        Assertions.assertNotNull(usuarioList);
+
         usuarioService.listarUsuarios().forEach(System.out::println);
 
         verify(usuarioRepository, times(1)).findAll();
     }
 
     @Test
-    void atualizarUsuario() {
+    void atualizarUsuarioSucesso() {
+        String senhaCriptografada = new BCryptPasswordEncoder().encode("Marcio123@");
+
+        Usuario usuario = new Usuario("Marcio1",
+                LocalDate.now(),
+                "MarcioMM1@gmail.com",
+                senhaCriptografada,
+                NiveisUsuario.USER);
+
+        long id = 1;
+        usuario.setId(id);
+
+        System.out.println(usuario);
+
+        when(usuarioRepository.existsById(id)).thenReturn(true);
+        when(usuarioRepository.findById(id)).thenReturn(Optional.of(usuario));
+
+        String senhaCriptografadaUpdate = new BCryptPasswordEncoder().encode("senhateste@");
+        UpdateUsuarioDto updateUsuarioDto = new UpdateUsuarioDto("Antonio", senhaCriptografadaUpdate);
+
+        usuarioService.atualizarUsuario(id, updateUsuarioDto);
+
+        verify(usuarioRepository, times(1)).existsById(id);
+        verify(usuarioRepository, times(1)).findById(id);
+
+        System.out.println(usuario);
+    }
+
+    @Test
+    void atualizarUsuarioInexistente() {
+        long id = 1;
+        String senhaCriptografadaUpdate = new BCryptPasswordEncoder().encode("senhateste@");
+        UpdateUsuarioDto updateUsuarioDto = new UpdateUsuarioDto("Antonio", senhaCriptografadaUpdate);
+        when(usuarioRepository.existsById(id)).thenReturn(false);
+        Exception thrown = Assertions.assertThrows(UsuarioInexistenteException.class, () -> usuarioService.atualizarUsuario(id, updateUsuarioDto));
+        Assertions.assertEquals("Usuário não encontrado", thrown.getMessage());
+        verify(usuarioRepository, times(1)).existsById(id);
+    }
+
+    @Test
+    void atualizarUsuarioSemDados() {
+        long id = 1;
+        UpdateUsuarioDto updateUsuarioDto = new UpdateUsuarioDto(null, "");
+        when(usuarioRepository.existsById(id)).thenReturn(true);
+        Exception thrown = Assertions.assertThrows(ValoresVaziosException.class, () -> usuarioService.atualizarUsuario(id, updateUsuarioDto));
+        Assertions.assertEquals("Nenhuma alteração foi feita.", thrown.getMessage());
+        verify(usuarioRepository, times(1)).existsById(id);
     }
 
     @Test

@@ -7,6 +7,8 @@ import com.backlog_user_service.user_service.entity.NiveisUsuario;
 import com.backlog_user_service.user_service.entity.Usuario;
 import com.backlog_user_service.user_service.exceptions.EmailDuplicadoException;
 import com.backlog_user_service.user_service.exceptions.NomeDeUsuarioDuplicadoException;
+import com.backlog_user_service.user_service.exceptions.UsuarioInexistenteException;
+import com.backlog_user_service.user_service.exceptions.ValoresVaziosException;
 import com.backlog_user_service.user_service.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,15 +44,19 @@ public class UsuarioService {
                 .toList();
     }
 
-    public ResponseEntity<String> atualizarUsuario(long id, UpdateUsuarioDto updateUsuarioDto) {
+    public void atualizarUsuario(long id, UpdateUsuarioDto updateUsuarioDto) {
+        if(!usuarioRepository.existsById(id)) throw new UsuarioInexistenteException("Usuário não encontrado");
+
+        if ((updateUsuarioDto.nomeUsuario() == null
+                || updateUsuarioDto.nomeUsuario().equals(""))
+                && (updateUsuarioDto.senhaUsuario()  == null
+                || updateUsuarioDto.senhaUsuario().equals("")))
+            throw new ValoresVaziosException("Nenhuma alteração foi feita.");
+
         Usuario usuario = usuarioRepository.findById(id).get();
-        try {
-            if(!updateUsuarioDto.nomeUsuario().isEmpty()) usuario.setNomeUsuario(updateUsuarioDto.nomeUsuario());
-            if(!updateUsuarioDto.senhaUsuario().isEmpty()) usuario.setSenhaUsuario(updateUsuarioDto.senhaUsuario());
-        } catch (NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O valor não pode ser nulo.");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body("Usuário atualizado com sucesso!");
+
+        if(updateUsuarioDto.nomeUsuario() != null ) usuario.setNomeUsuario(updateUsuarioDto.nomeUsuario());
+        if(updateUsuarioDto.senhaUsuario() != null) usuario.setSenhaUsuario(updateUsuarioDto.senhaUsuario());
     }
 
     public ResponseEntity<String> criarAdmin(RegisterUsuarioDto registerDto) {

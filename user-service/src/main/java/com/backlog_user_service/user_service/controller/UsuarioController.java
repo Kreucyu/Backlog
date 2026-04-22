@@ -4,6 +4,8 @@ import com.backlog_user_service.user_service.dto.Request.RegisterUsuarioDto;
 import com.backlog_user_service.user_service.dto.Response.RecoveryUsuarioDto;
 import com.backlog_user_service.user_service.dto.Request.UpdateUsuarioDto;
 import com.backlog_user_service.user_service.entity.Usuario;
+import com.backlog_user_service.user_service.exceptions.UsuarioInexistenteException;
+import com.backlog_user_service.user_service.exceptions.ValoresVaziosException;
 import com.backlog_user_service.user_service.repository.UsuarioRepository;
 import com.backlog_user_service.user_service.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -35,7 +37,12 @@ public class UsuarioController {
 
     @PatchMapping("/{id}")
     private ResponseEntity<String> atualizarUsuario(@PathVariable Long id, @RequestBody UpdateUsuarioDto updateUsuarioDto) {
-        return usuarioService.atualizarUsuario(id, updateUsuarioDto);
+        try {
+            usuarioService.atualizarUsuario(id, updateUsuarioDto);
+            return ResponseEntity.status(HttpStatus.OK).body("Usuário atualizado com sucesso!");
+        } catch (ValoresVaziosException | UsuarioInexistenteException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PostMapping("/novoAdmin")

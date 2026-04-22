@@ -1,10 +1,8 @@
 package com.backlog_user_service.user_service.dto.Request;
 
 import jakarta.validation.constraints.Size;
+import org.jspecify.annotations.Nullable;
 
-import java.time.LocalDate;
-
-public record UpdateUsuarioDto(String nomeUsuario,
-                               @Size(min = 6, max = 100)
-                               String senhaUsuario,
-                               LocalDate dataNascimento) {}
+public record UpdateUsuarioDto(@Nullable String nomeUsuario,
+                               @Nullable @Size(min = 6, max = 100)
+                               String senhaUsuario) {}

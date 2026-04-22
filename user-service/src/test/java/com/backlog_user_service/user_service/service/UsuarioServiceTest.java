@@ -16,15 +16,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static java.lang.IO.println;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -170,7 +166,40 @@ class UsuarioServiceTest {
     }
 
     @Test
-    void criarAdmin() {
+    void criarAdminSucesso() {
+        RegisterUsuarioDto registerUsuarioDto = new RegisterUsuarioDto("ADMIN", "ADMIN@gmail.com", "ADMIN123@", LocalDate.now());
+        usuarioService.criarUsuario(registerUsuarioDto);
+        verify(usuarioRepository, times(1)).save(any());
+        verify(usuarioRepository, times(1)).findByEmailUsuario("ADMIN@gmail.com");
+        verify(usuarioRepository, times(1)).existsUsuarioByNomeUsuario("ADMIN");
+    }
+
+    @Test
+    void criarAdminEmailJaUtilizado() {
+        String senhaCriptografada = new BCryptPasswordEncoder().encode("ADMIN123@");
+        Usuario usuario = new Usuario("ADMIN",
+                LocalDate.now(),
+                "ADMIN@gmail.com",
+                senhaCriptografada,
+                NiveisUsuario.ADMIN);
+        when(usuarioRepository.findByEmailUsuario("ADMIN@gmail.com")).thenReturn(usuario);
+        RegisterUsuarioDto registerUsuarioDto = new RegisterUsuarioDto("ADMIN123", "ADMIN@gmail.com", "ADMIN123@", LocalDate.now());
+        Exception thrown = Assertions.assertThrows(EmailDuplicadoException.class, () -> usuarioService.criarUsuario(registerUsuarioDto));
+        Assertions.assertEquals("Email já cadastrado.", thrown.getMessage());
+        verify(usuarioRepository, never()).save(any());
+        verify(usuarioRepository, times(1)).findByEmailUsuario("ADMIN@gmail.com");
+        verify(usuarioRepository, never()).existsUsuarioByNomeUsuario("ADMIN123");
+    }
+
+    @Test
+    void criarAdminNomeJaUtilizado() {
+        when(usuarioRepository.existsUsuarioByNomeUsuario("ADMIN")).thenReturn(true);
+        RegisterUsuarioDto registerUsuarioDto = new RegisterUsuarioDto("ADMIN", "ADMIN123@gmail.com", "ADMIN123@", LocalDate.now());
+        Exception thrown = Assertions.assertThrows(NomeDeUsuarioDuplicadoException.class, () -> usuarioService.criarUsuario(registerUsuarioDto));
+        Assertions.assertEquals("O nome de usuário já está em uso.", thrown.getMessage());
+        verify(usuarioRepository, never()).save(any());
+        verify(usuarioRepository, times(1)).findByEmailUsuario("ADMIN123@gmail.com");
+        verify(usuarioRepository, times(1)).existsUsuarioByNomeUsuario("ADMIN");
     }
 
     @Test
